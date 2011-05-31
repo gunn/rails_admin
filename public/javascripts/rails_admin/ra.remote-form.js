@@ -15,6 +15,7 @@
     dialog: null,
     options: {
       dialogClass: "",
+      height: 600,
       width: 720
     },
 
@@ -46,7 +47,7 @@
           saveButtonText = dialog.find(":submit[name=_save]").text(),
           cancelButtonText = dialog.find(":submit[name=_continue]").text();
 
-      dialog.dialog("option", "title", $(".ui-widget-header", dialog).remove().text());
+      dialog.dialog("option", "title", $("h2.title", dialog).remove().text());
 
       form.attr("data-remote", true);
       dialog.find(":submit").remove();
@@ -72,6 +73,11 @@
       }
 
       dialog.dialog("option", "buttons", buttons);
+
+      /* Remove original button container if it's now empty */
+      if (0 == $("form > .navform :submit", dialog).length) {
+        $("form > .navform", dialog).remove();
+      }
 
       form.bind("ajax:success", function(e, data, status, xhr) {
         var json = $.parseJSON(data);
@@ -106,7 +112,8 @@
             widget.dialog = null;
           },
           modal: true,
-          width: this.options.width
+          width: this.options.width,
+          height: this.options.height
         });
       }
       return this.dialog;
